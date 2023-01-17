@@ -1,0 +1,3 @@
+500 a kõzéphegység
+200 b dombság
+1600 c 1600 magashegység

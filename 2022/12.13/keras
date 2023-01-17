@@ -1,0 +1,55 @@
+import tensorflow
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+import pygame
+import numpy as np
+
+plrx = 1.0
+plry = 1.0
+plrhp = 1.0
+
+class Plr():
+    def __init__(self,x,y,hp):
+        self.hp = hp
+        self.x = x
+        self.y = y
+Plr(1.0,1.0,1.0)
+model = Sequential()
+model.add(Dense(units=64, activation='relu', input_dim=10,))
+model.add(Dense(units=10, activation='softmax'))
+model.compile(loss='categorical_crossentropy',
+              optimizer='sgd',
+              metrics=['accuracy'])
+def get_current_game_state():
+    return [plrx,plry,plrhp,0,0,0,0,0,0,0]
+
+def move_player(prediction):
+    action = np.argmax(prediction)
+
+    if action == 0:
+        Plr.y -= 1
+    elif action == 1:
+        Plr.y += 1
+    elif action == 2:
+        Plr.x -= 1
+    elif action == 3:
+        Plr.x += 1
+
+def check_game_over():
+    if Plr.hp <= 0:
+        return True
+    else:
+        return False
+
+game_over = False
+while not game_over:
+    game_state = get_current_game_state()
+    prediction = model.predict(game_state)
+
+    move_player(prediction)
+
+    game_over = check_game_over()
+    print(Plr.x,Plr.y)
+
+pygame.quit()
